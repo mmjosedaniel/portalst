@@ -29,6 +29,8 @@ class CreateColumnsProductPriceStatusInProducts extends Migration
     {
         Schema::table('products', function (Blueprint $table) {
             $table->dropColumn('product_name');
+            $table->dropColumn('product_price');
+            $table->dropColumn('product_status');
         });
     }
 }
