@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Product;
 
 class OrdersController extends Controller
 {
@@ -23,7 +24,11 @@ class OrdersController extends Controller
      */
     public function create()
     {
-        //
+        $products = getProducts();
+
+        return view('orders.create', [
+            'products' => $products
+        ]);
     }
 
     /**
@@ -81,4 +86,13 @@ class OrdersController extends Controller
     {
         //
     }
+}
+
+function getProducts(){
+    $products = Product
+    ::select('products.*')
+    ->orderBy('product_name', 'asc')
+    ->get();
+    
+    return $products;
 }

@@ -2,8 +2,21 @@
 
 @section('content')
 
+    <section>    
+        <div class="card text-center">
+            <div class="card-footer text-muted">
+                :::
+            </div>
+            <div class="card-body">
+                <h1 class="card-title">Cocina</h1>
+            </div>
+        </div>
+    </section>
+
+    <br>
+
     <div>
-        <h1>Cocina</h1>
+        <a href="/" class="btn btn-primary">Volver</a>
     </div>
 
 @endsection
