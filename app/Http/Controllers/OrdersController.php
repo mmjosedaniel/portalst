@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Product;
+use App\Order;
 
 class OrdersController extends Controller
 {
@@ -24,10 +25,17 @@ class OrdersController extends Controller
      */
     public function create()
     {
-        $products = getProducts();
+        $order = new Order();
+        $order->order_status = 1;
+        $order->save();
+
+        $products = getProductsA();
+
+        $orderId = $order->id;
 
         return view('orders.create', [
-            'products' => $products
+            'products' => $products,
+            'orderId' => var_dump ($orderId)
         ]);
     }
 
@@ -87,8 +95,8 @@ class OrdersController extends Controller
         //
     }
 }
-
-function getProducts(){
+//Repeated
+function getProductsA(){
     $products = Product
     ::select('products.*')
     ->orderBy('product_name', 'asc')

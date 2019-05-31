@@ -18,9 +18,10 @@
     <section>
         <div >
             <h1>Products</h1>
+            <div> {{ $orderId }} </div>
             @foreach ($products as $product)
                 @if($product->product_status == 1)
-                    <div class="container bg-light border border-primary my2">
+                    <div class="container bg-light my2">
                         <form action="/orders" method="post"></form>
                         @csrf
                         <div class="row ">

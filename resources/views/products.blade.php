@@ -38,7 +38,7 @@
             <h1>Products</h1>
             @foreach ($products as $product)
                 @if($product->product_status == 1)
-                    <div class="container bg-light border border-primary my-2">
+                    <div class="container bg-light my-2">
                         <form action="products.destroy"></form>
                         @csrf
                         <div class="row ">
