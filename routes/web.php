@@ -17,6 +17,9 @@ Route::get('/orders', 'OrdersController@index');
 Route::resource('/orders', 'OrdersController');
 
 Route::get('/kitchen', 'KitchenController@index');
+Route::resource('/kitchen', 'KitchenController');
 
 Route::get('/products', 'ProductsController@index');
 Route::resource('/products', 'ProductsController');
+
+Route::resource('/order_product', 'OrderProductController');

@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\Order;
+use App\Product;
+use App\OrderProduct;
+
 class KitchenController extends Controller
 {
     /**
@@ -13,7 +17,13 @@ class KitchenController extends Controller
      */
     public function index()
     {
-        return view('kitchen');
+        $orderAndProducts = getOrderAndProducts();
+        $orders = getOrdersKitchen();
+
+        return view('kitchen', [
+            'orders' => $orders,
+            'orderAndProducts' => $orderAndProducts
+        ]);
     }
 
     /**
@@ -68,7 +78,21 @@ class KitchenController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $orderPrice = 0;
+        $orderAndProducts = getOrderAndProducts();
+        
+        
+        foreach($orderAndProducts as $orderAndProduct ){
+            if($orderAndProduct->order_id == $id){
+                $orderPrice += $orderAndProduct->product_price;
+            }
+        }
+        $order = Order::find($id);
+        $order->order_price = $orderPrice;
+        $order->order_status++;
+        $order->save();
+        
+        return redirect("kitchen");
     }
 
     /**
@@ -82,3 +106,39 @@ class KitchenController extends Controller
         //
     }
 }
+
+function getOrdersKitchen(){
+    $orders = Order::
+            where('order_status', 2)
+            ->get();
+            
+    return $orders;
+}
+
+function getOrderAndProducts(){
+    $orderAndProducts = OrderProduct::
+                join('orders', 'order_products.order_id', '=', 'orders.id')
+                ->join('products', 'order_products.product_id', '=', 'products.id')
+                ->select('orders.*', 'products.*', 'order_products.*', 'order_products.id as order_product_id')
+                ->orderBy('product_name', 'asc')
+                ->where([
+                    ['order_products.order_product_status', '=', '1'],
+                    ['orders.order_status', '=', '2']
+                ])
+                ->get();
+    return $orderAndProducts;
+}
+
+/* function setOrderPrice ($ordersAndProducts, $postData){
+    $orderPrice = 0;
+
+    foreach ($ordersAndProducts as $orderAndProduct){
+        if ($orderAndProduct->order_id == $postData['orderToReset']){
+            $orderPrice += $orderAndProduct->product_price;
+        }
+    }    
+
+    $order = Orders::find($postData['orderToReset']);
+    $order->order_price = $orderPrice;
+    $order->save();
+} */

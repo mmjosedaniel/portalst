@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Product;
+use App\OrderProduct;
 
-class ProductsController extends Controller
+class OrderProductController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,11 +14,7 @@ class ProductsController extends Controller
      */
     public function index()
     {
-        $products = getProducts();
-
-        return view('products', [
-            'products' => $products
-        ]);
+        //
     }
 
     /**
@@ -28,7 +24,7 @@ class ProductsController extends Controller
      */
     public function create()
     {
-        
+        //
     }
 
     /**
@@ -39,12 +35,14 @@ class ProductsController extends Controller
      */
     public function store(Request $request)
     {
-        $product = new Product();
-        $product->product_name = ucwords($request->get('productName'));
-        $product->product_price = $request->get('productPrice');
-        $product->save();
+        $orderId = $request->post('orderId');
 
-        return redirect('/products');
+        $orderProduct = new OrderProduct();
+        $orderProduct->order_id = $orderId;
+        $orderProduct->product_id = $request->post('productId');
+        $orderProduct->save();
+
+        return redirect("orders/$orderId/edit");
     }
 
     /**
@@ -92,26 +90,3 @@ class ProductsController extends Controller
         //
     }
 }
-
-//Repeated
-function getProducts(){
-    $products = Product
-    ::select('products.*')
-    ->orderBy('product_name', 'asc')
-    ->get();
-    
-    return $products;
-}
-
-/* function createProduct($postData){
-    $product = new Products();
-                    $product->product_name = ucwords($postData['productName']);
-                    $product->product_price = $postData['productPrice'];
-                    $product->save();
-}
-
-function deleteProduct($postData){
-    $product = Products::find($postData['delete']);
-                    $product->product_status = 0;
-                    $product->save();
-} */

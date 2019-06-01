@@ -38,21 +38,22 @@
             <h1>Products</h1>
             @foreach ($products as $product)
                 @if($product->product_status == 1)
-                    <div class="container bg-light my-2">
-                        <form action="products.destroy"></form>
-                        @csrf
-                        <div class="row ">
-                            <input type="hidden" name="delete" value="{{ $product->product_id }}">
-                            <div class="col-sm ">
-                                <label class="">{{ $product->product_name }}</label>
+                    <div class="container bg-light my-3">
+                        <form action="products.destroy">
+                            @csrf
+                            <div class="row">
+                                <input type="hidden" name="delete" value="{{ $product->product_id }}">
+                                <div class="col-sm ">
+                                    <label class="">{{ $product->product_name }}</label>
+                                </div>
+                                <div class="col-sm">
+                                    <label class="">{{ $product->product_price }}</label>
+                                </div>
+                                <div class="col-sm">
+                                    <button type="submit" class="btn btn-warning float-right">Delete</button>
+                                </div>
                             </div>
-                            <div class="col-sm">
-                                <label class="">{{ $product->product_price }}</label>
-                            </div>
-                            <div class="col-sm">
-                                <button type="submit" class="btn btn-warning float-right">Delete</button>
-                            </div>
-                        </div>
+                        </form>
                     </div>
                 @endif
             @endforeach

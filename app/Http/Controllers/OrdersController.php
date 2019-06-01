@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Product;
+
 use App\Order;
+use App\Product;
+use App\OrderProduct;
 
 class OrdersController extends Controller
 {
@@ -15,7 +17,15 @@ class OrdersController extends Controller
      */
     public function index()
     {
-        return view('orders');
+        $products = getProductsA();
+        $orderAndProducts = getOrdersAndProducts();
+        $order = Order::all();
+
+        return view('orders', [
+            'products' => $products,
+            'orders'=> $order,
+            'orderAndProducts' => $orderAndProducts
+        ]);
     }
 
     /**
@@ -29,14 +39,9 @@ class OrdersController extends Controller
         $order->order_status = 1;
         $order->save();
 
-        $products = getProductsA();
-
         $orderId = $order->id;
 
-        return view('orders.create', [
-            'products' => $products,
-            'orderId' => var_dump ($orderId)
-        ]);
+        return redirect("/orders/$orderId/edit");
     }
 
     /**
@@ -69,7 +74,14 @@ class OrdersController extends Controller
      */
     public function edit($id)
     {
-        //
+        $products = getProductsA();
+        $orderAndProducts = getOrdersAndProducts();
+
+        return view('orders.edit', [
+            'products' => $products,
+            'orderId'=> $id,
+            'orderAndProducts' => $orderAndProducts
+        ]);
     }
 
     /**
@@ -81,7 +93,11 @@ class OrdersController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $order = Order::find($id);
+        $order->order_status++;
+        $order->save();
+
+        return redirect("orders");
     }
 
     /**
@@ -95,7 +111,8 @@ class OrdersController extends Controller
         //
     }
 }
-//Repeated
+
+//Repeated three times
 function getProductsA(){
     $products = Product
     ::select('products.*')
@@ -103,4 +120,17 @@ function getProductsA(){
     ->get();
     
     return $products;
+}
+
+//Repeated twice
+function getOrdersAndProducts(){
+    $ordersAndProducts = OrderProduct::
+    join('orders', 'order_products.order_id', '=', 'orders.id' )
+    ->join('products', 'order_products.product_id', '=', 'products.id')
+    ->select('orders.*', 'order_products.*', 'products.*', 'order_products.id as order_product_id')
+    ->orderBy('product_name', 'asc')
+    ->where('order_products.order_product_status', '=', '1')
+    ->get();
+
+    return $ordersAndProducts;
 }
