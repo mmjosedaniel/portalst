@@ -39,9 +39,15 @@ class ProductsController extends Controller
      */
     public function store(Request $request)
     {
+
+        $validDate = $request->validate([
+            'productName'=> 'required|alpha_num',
+            'productPrice'=> 'required|numeric'
+        ]);
+
         $product = new Product();
-        $product->product_name = ucwords($request->get('productName'));
-        $product->product_price = $request->get('productPrice');
+        $product->product_name = ucwords($validDate['productName']);
+        $product->product_price = $validDate['productPrice'];
         $product->save();
 
         return redirect('/products');
@@ -89,7 +95,11 @@ class ProductsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $product = Product::findOrFail($id);
+        $product->product_status = 0;
+        $product->save();
+
+        return redirect('/products');
     }
 }
 

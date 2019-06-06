@@ -61,8 +61,9 @@
                 @foreach ($orderAndProducts as $orderAndProduct)
                 @if($orderAndProduct->order_id == $orderId && $orderAndProduct->order_product_status == 1)
                 <div class="container bg-light my-3">
-                    <form action="" method="POST">
+                    <form action="/../order_product/{{ $orderAndProduct->order_product_id }}" method="POST" onsubmit="return validateForm()">
                     @csrf
+                    @method('put')
                         <div class="row">
                             <div class="col-sm">
                                 <label class="">{{ $orderAndProduct->product_name }}</label>
@@ -71,7 +72,7 @@
                                 <label class="">{{ $orderAndProduct->product_price }}</label>
                             </div>
 
-                            <input type="hidden" name="orderId" value="{{ $orderId }}">
+                            <input type="hidden" name="location" value="orders">
 
                             <div class="col-sm">
                                 <button type="submit" class="btn btn-warning float-right">Eliminar</button>

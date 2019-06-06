@@ -25,12 +25,14 @@
             @foreach ($orderAndProducts as $orderAndProduct)
             @if($orderAndProduct->order_id == $order->id)
                 <div class="container bg-light my-3">
-                    <form action="kitchen/{{ $orderAndProduct->order_product_id }}" method="post">
+                    <form action="/../order_product/{{ $orderAndProduct->order_product_id }}" method="post" onsubmit="return validateForm()">
                     @csrf
+                    @method('put')
                         <div class="row">
                             <div class="col-sm">
                                 <label for=""> {{ $orderAndProduct->product_name }} </label>
                             </div>
+                            <input type="hidden" name="location" value="kitchen">
                             <div class="col-sm">
                                 <button type="submit" class="btn btn-warning float-right">Eliminar</button>
                             </div>
@@ -40,7 +42,7 @@
             @endif
             @endforeach
             <div class="text-center my-3">
-                <form action="/kitchen/{{ $order->id }}" method="POST">
+                <form action="/kitchen/{{ $order->id }}" method="POST" onsubmit="return validateForm()">
                     @csrf
                     @method('put')
                     <button type="submit" class="btn btn-success">Enviar orden</button>
@@ -57,5 +59,7 @@
     <div>
         <a href="/" class="btn btn-primary">Volver</a>
     </div>
+
+    <bus-component></bus-component>
 
 @endsection

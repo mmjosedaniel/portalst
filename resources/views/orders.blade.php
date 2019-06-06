@@ -55,10 +55,10 @@
                         </div>
 
                         <div class="text-center my-3">
-                            <form action="/orders/{{ $order->id }}" method="POST">
+                            <form action="/orders/{{ $order->id }}" method="POST" onsubmit="return validateForm()">
                                 @csrf
                                 @method('put')
-                                <button type="submit" class="btn btn-success">Enviar orden</button>
+                                <button type="submit" class="btn btn-success">Pagar orden</button>
                                 
                             </form>
                         </div>

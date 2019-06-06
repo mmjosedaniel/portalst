@@ -29,17 +29,24 @@ class OrderProductController extends Controller
 
     /**
      * Store a newly created resource in storage.
+     * 
+     * It adds a product to an order.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        $orderId = $request->post('orderId');
+        $validData = $request->validate([
+            'orderId' => 'required|numeric',
+            'productId' => 'required|numeric'
+
+        ]);
+        $orderId = $validData['orderId'];
 
         $orderProduct = new OrderProduct();
         $orderProduct->order_id = $orderId;
-        $orderProduct->product_id = $request->post('productId');
+        $orderProduct->product_id = $validData['productId'];
         $orderProduct->save();
 
         return redirect("orders/$orderId/edit");
@@ -69,6 +76,8 @@ class OrderProductController extends Controller
 
     /**
      * Update the specified resource in storage.
+     * 
+     * I am using it to retire a product from an order by changing order_product_status to 0.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
@@ -76,7 +85,21 @@ class OrderProductController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        
+
+        $orderProduct = OrderProduct::findOrFail($id);
+        $orderProduct->order_product_status = 0;
+        $orderProduct->save();
+
+        $location = $request['location'];
+        $orderId = $orderProduct->order_id;
+
+
+        if($location == 'orders'){
+            return redirect("orders/$orderId/edit");
+        }else if($location == 'kitchen'){
+            return redirect('kitchen');
+        }
     }
 
     /**
@@ -90,3 +113,12 @@ class OrderProductController extends Controller
         //
     }
 }
+
+
+/* if ($request->getMethod() == 'POST'){
+    $postData = $request->getParsedBody();
+    
+    if (key($postData) == 'order'){
+
+    }
+} */

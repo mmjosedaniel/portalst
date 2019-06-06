@@ -17,7 +17,7 @@ class OrdersController extends Controller
      */
     public function index()
     {
-        $products = getProductsA();
+        $products = getProductsForOrders();
         $orderAndProducts = getOrdersAndProducts();
         $order = Order::all();
 
@@ -74,7 +74,7 @@ class OrdersController extends Controller
      */
     public function edit($id)
     {
-        $products = getProductsA();
+        $products = getProductsForOrders();
         $orderAndProducts = getOrdersAndProducts();
 
         return view('orders.edit', [
@@ -86,6 +86,8 @@ class OrdersController extends Controller
 
     /**
      * Update the specified resource in storage.
+     * 
+     * (MMJDaniel)I am using it to send the order to the kitchen.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
@@ -113,7 +115,7 @@ class OrdersController extends Controller
 }
 
 //Repeated three times
-function getProductsA(){
+function getProductsForOrders(){
     $products = Product
     ::select('products.*')
     ->orderBy('product_name', 'asc')

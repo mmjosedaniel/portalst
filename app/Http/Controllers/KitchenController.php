@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Order;
-use App\Product;
 use App\OrderProduct;
 
 class KitchenController extends Controller
@@ -128,17 +127,3 @@ function getOrderAndProducts(){
                 ->get();
     return $orderAndProducts;
 }
-
-/* function setOrderPrice ($ordersAndProducts, $postData){
-    $orderPrice = 0;
-
-    foreach ($ordersAndProducts as $orderAndProduct){
-        if ($orderAndProduct->order_id == $postData['orderToReset']){
-            $orderPrice += $orderAndProduct->product_price;
-        }
-    }    
-
-    $order = Orders::find($postData['orderToReset']);
-    $order->order_price = $orderPrice;
-    $order->save();
-} */

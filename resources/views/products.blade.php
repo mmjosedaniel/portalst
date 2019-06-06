@@ -16,9 +16,19 @@
         
     <br>
 
+    @if($errors-> any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }} </li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
     <section>
         <div >
-            <form action="/products" method="post">
+            <form action="/products" method="post" onsubmit="return validateForm()">
                 @csrf
                 <div class="form-group">
                     <label for="">Producto:</label>
@@ -39,8 +49,9 @@
             @foreach ($products as $product)
                 @if($product->product_status == 1)
                     <div class="container bg-light my-3">
-                        <form action="products.destroy">
+                        <form action="products/{{ $product->id }}" method="POST" onsubmit="return validateForm()">
                             @csrf
+                            @method('delete')
                             <div class="row">
                                 <input type="hidden" name="delete" value="{{ $product->product_id }}">
                                 <div class="col-sm ">
